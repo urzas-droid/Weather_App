@@ -17,6 +17,57 @@
     </div>    
 </template>
 
+<script>
+    const d = new Date();
+    const months = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
+    const days = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"];
+
+    getWeatherJSON();
+
+    //////////// functions /////////
+
+
+
+    function getPositionData(){
+        if(navigator.geolocation){
+            navigator.geolocation.getCurrentPosition(getWeatherJSON);
+        }
+        else{
+            console.log('Error: Geolocation not supported');
+        }
+    }
+
+    function getDayOfWeek(x){
+        if ((d.getDay() + x) > 6){
+            x = (d.getDay() + x) - 7;
+        } else {x = d.getDay() + x;}
+        return x;
+    }
+
+    async function getWeatherJSON(position){
+        let city = "Berlin";
+        const apiKey = 'key=30189c89030a42629e195610240306%20';
+        const apiCall = "https://api.weatherapi.com/v1/forecast.json?q=Berlin&days=3&aqi=no&alerts=no&"
+        console.log(apiCall);
+        let call = apiCall + apiKey;
+        
+        const response = await
+        fetch(call);
+        const forecast = await response.json();
+        console.log(forecast)
+
+        document.getElementById("ort").innerHTML = forecast.location.region;
+        document.getElementById("temperatur").innerHTML = forecast.current.temp_c + "&deg;";
+        document.getElementById("minmax").innerHTML = "Max: " + forecast.forecast.forecastday[0].day.maxtemp_c + "&deg;" + '<br>' + "Min: " + forecast.forecast.forecastday[0].day.mintemp_c + "&deg;";
+        document.getElementById("datum").innerHTML = days[d.getDay()-1] + ", " + d.getDate() + ". " + months[d.getMonth()];
+        document.getElementById("icon").src = forecast.current.condition.icon ;
+        document.getElementById("beschreibung").innerHTML = forecast.current.condition.text;
+        document.getElementById("forecast1").innerHTML = forecast.forecast.forecastday[1].day.maxtemp_c + "&deg" + '<br>' + days[getDayOfWeek(0)];
+        document.getElementById("forecast2").innerHTML = forecast.forecast.forecastday[2].day.maxtemp_c + "&deg" + '<br>' + days[getDayOfWeek(1)]; 
+    
+    }
+    </script>
+
 <style>
    .behaelter{
         width: fit-content;
@@ -111,56 +162,3 @@
 
    
 </style>
-
-<script>
-const d = new Date();
-const months = ["Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
-const days = ["Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag", "Sonntag"];
-
-getWeatherJSON();
-
-//////////// functions /////////
-
-
-
-function getPositionData(){
-    if(navigator.geolocation){
-        navigator.geolocation.getCurrentPosition(getWeatherJSON);
-    }
-    else{
-        console.log('Error: Geolocation not supported');
-    }
-}
-
-function getDayOfWeek(x){
-    if ((d.getDay() + x) > 6){
-        x = (d.getDay() + x) - 7;
-    } else {x = d.getDay() + x;}
-    return x;
-}
-
-async function getWeatherJSON(position){
-    const apiKey = 'key=30189c89030a42629e195610240306%20';
-    const apiCall = "https://api.weatherapi.com/v1/forecast.json?q=London&days=3&aqi=no&alerts=no&"
-        
-    let call = apiCall + apiKey;
-    
-    const response = await
-    fetch(call);
-    const forecast = await response.json();
-    console.log(forecast)
-
-    document.getElementById("ort").innerHTML = forecast.location.region;
-    document.getElementById("temperatur").innerHTML = forecast.current.temp_c + "&deg;";
-    document.getElementById("minmax").innerHTML = "Max: " + forecast.forecast.forecastday[0].day.maxtemp_c + "&deg;" + '<br>' + "Min: " + forecast.forecast.forecastday[0].day.mintemp_c + "&deg;";
-    document.getElementById("datum").innerHTML = days[d.getDay()-1] + ", " + d.getDate() + ". " + months[d.getMonth()];
-    document.getElementById("icon").src = forecast.current.condition.icon ;
-    document.getElementById("beschreibung").innerHTML = forecast.current.condition.text;
-    document.getElementById("forecast1").innerHTML = forecast.forecast.forecastday[1].day.maxtemp_c + "&deg" + '<br>' + days[getDayOfWeek(0)];
-    document.getElementById("forecast2").innerHTML = forecast.forecast.forecastday[2].day.maxtemp_c + "&deg" + '<br>' + days[getDayOfWeek(1)]; 
- 
-}
-
-
-</script>
-
