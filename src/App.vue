@@ -20,11 +20,8 @@
 import { ref } from "vue";
 import Widget from "./components/weather_widget.vue";
 import Search from "./components/search_function.vue";
-import type { RefSymbol } from "@vue/reactivity";
 
-//emit for delete
 const locations = ref<string[]>([]);
-const testName = "";
 
 getCurrentLocation();
 

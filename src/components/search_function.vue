@@ -51,7 +51,6 @@ async function searchSuggestion(searchPhrase: string) {
 
   const response = await fetch(call);
   const suggestions: SearchApiResponse = await response.json();
-  //console.log(suggestions);
   citiesList.value = suggestions;
   return suggestions;
 }
