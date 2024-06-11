@@ -1,6 +1,6 @@
 <template>
   <div id="header">
-    <h1>Weather Widget App</h1>
+    <h1>Weather Forecast</h1>
   </div>
 
   <div id="widgetContainer">
@@ -8,10 +8,8 @@
       v-for="element in locations"
       :location="element"
       id="baseWidget"
-      @click="toggleForecast"
     ></Widget>
   </div>
-
   <div style="text-align: center">
     <button id="addLocation" @click="addLocation">+</button>
   </div>
@@ -21,17 +19,29 @@
 import { ref } from "vue";
 import Widget from "./components/weather_widget.vue";
 
-const locations = ref<string[]>(["Berlin"]);
+const locations = ref<string[]>([]);
 
-function addLocation() {
-  locations.value.push("London");
+getCurrentLocation();
+
+function getCurrentLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  } else {
+    console.log("Error fetching geolocation");
+  }
 }
 
-function toggleForecast() {
-  if (document.getElementById("unterbehaelter3")?.style.display === "none") {
-    document.getElementById("unterbehaelter3").style.display = "block";
+function showPosition(position: any) {
+  const woBinICh = position.coords.latitude + ", " + position.coords.longitude;
+  locations.value.push(woBinICh);
+}
+
+function addLocation() {
+  let userInputLocation = prompt("Welche Stadt möchten Sie hinzufügen?");
+  if (userInputLocation !== null) {
+    locations.value.push(userInputLocation);
   } else {
-    document.getElementById("unterbehaelter3").style.display = "none";
+    console.log("Abgebrochen!");
   }
 }
 </script>

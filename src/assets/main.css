@@ -1,6 +1,5 @@
 body {
-  background-color: lightgrey;
-  background-image: url('./src/components/images/background.jpg');
+  background-color: rgb(55, 58, 75) ;
   background-size: 100% auto;
 }
 

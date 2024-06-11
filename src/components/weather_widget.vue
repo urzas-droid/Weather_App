@@ -1,7 +1,7 @@
 <template>
-  <div class="behaelter">
-    <div id="ort">{{ weatherData?.location.region }}</div>
-    <div class="unterbehaelter">
+  <div class="widgetBehaelter" @click="isShow = !isShow">
+    <div id="ort">{{ weatherData?.location.name }}</div>
+    <div class="unterbehaelter" id="aktuellesWetterBehaelter">
       <img id="icon" :src="weatherData?.current.condition.icon" />
       <div id="temperatur">{{ weatherData?.current.temp_c }}&deg;</div>
       <div id="minmax">
@@ -14,25 +14,54 @@
         >
       </div>
     </div>
-    <div class="unterbehaelter" id="unterbehaelter2">
+
+    <div class="unterbehaelter" id="datumBehaelter">
       <div id="beschreibung">{{ weatherData?.current.condition.text }}</div>
       <div id="datum">
         {{ days[d.getDay()] }}, {{ d.getDate() }}. {{ months[d.getMonth()] }}
       </div>
     </div>
-    <div class="unterbehaelter" id="unterbehaelter3" @click="">
+
+    <div class="unterbehaelter" id="forecastBehaelter" v-if="isShow">
       <div class="forecast" id="forecast1">
+        <img
+          id="forecastIcon1"
+          :src="weatherData?.forecast.forecastday[1].day.condition.icon"
+        />
+        <br />
         {{ weatherData?.forecast.forecastday[1].day.maxtemp_c }}&deg;
+        <br />
+        {{ days[getDayOfWeek(1)] }}
       </div>
+
       <div class="forecast" id="forecast2">
+        <img
+          id="forecastIcon2"
+          :src="weatherData?.forecast.forecastday[2].day.condition.icon"
+        />
+        <br />
         {{ weatherData?.forecast.forecastday[2].day.maxtemp_c }}&deg;
+        <br />
+        {{ days[getDayOfWeek(2)] }}
       </div>
     </div>
+    <button
+      name="deleteButton"
+      @click=""
+      style="
+        text-align: center;
+        align-self: center;
+        margin: 0 auto;
+        width: 70px;
+      "
+    >
+      DELETE
+    </button>
   </div>
 </template>
 
 <style scoped>
-.behaelter {
+.widgetBehaelter {
   width: fit-content;
   padding: 20px;
   margin: 100px auto;
@@ -51,13 +80,11 @@
   text-align: center;
   font-weight: bold;
   color: rgba(233, 233, 233, 0.8);
-  padding: 10px;
   width: 40%;
   margin: auto;
-}
-
-#unterbehaelter3 {
-  display: none;
+  padding: 1rem 1rem;
+  vertical-align: middle;
+  display: inline-block;
 }
 
 #ort {
@@ -66,6 +93,7 @@
   font-weight: bold;
   text-align: center;
   color: rgba(233, 233, 233, 0.8);
+  width: 80%;
 }
 
 #temperatur {
@@ -118,7 +146,7 @@
   padding: 10px;
 }
 
-#unterbehaelter2 {
+#datumBehaelter {
   border-bottom-style: solid;
   border-color: rgba(0, 0, 0, 0.5);
 }
@@ -127,20 +155,9 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
 
+let isShow = ref(false);
+
 const props = defineProps<{ location: string }>();
-
-type WeatherApiResponse = {
-  location: { region: string };
-  current: { temp_c: number; condition: { icon: string; text: string } };
-  forecast: {
-    forecastday: { day: { maxtemp_c: number; mintemp_c: number } }[];
-  };
-};
-const weatherData = ref<WeatherApiResponse>();
-
-onMounted(async () => {
-  weatherData.value = await getWeatherJSON();
-});
 
 const d = new Date();
 const months = [
@@ -167,10 +184,25 @@ const days = [
   "Samstag",
 ];
 
-//getWeatherJSON();
+const weatherData = ref<WeatherApiResponse>();
 
-//////////// functions /////////
-//convert to vue
+onMounted(async () => {
+  weatherData.value = await getWeatherJSON();
+});
+
+type WeatherApiResponse = {
+  location: { name: string };
+  current: { temp_c: number; condition: { icon: string; text: string } };
+  forecast: {
+    forecastday: {
+      day: {
+        maxtemp_c: number;
+        mintemp_c: number;
+        condition: { icon: string };
+      };
+    }[];
+  };
+};
 
 function getDayOfWeek(x: number) {
   if (d.getDay() + x > 6) {
@@ -183,13 +215,10 @@ function getDayOfWeek(x: number) {
 
 async function getWeatherJSON() {
   const apiKey = "key=30189c89030a42629e195610240306%20";
-
   const apiCall = `https://api.weatherapi.com/v1/forecast.json?q=${props.location}&days=3&aqi=no&alerts=no&`;
-
   let call = apiCall + apiKey;
 
   const response = await fetch(call);
-
   const forecast: WeatherApiResponse = await response.json();
   console.log(forecast);
   return forecast;
