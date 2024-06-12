@@ -1,56 +1,60 @@
 <template>
-  <div class="widgetBehaelter" @click="isShow = !isShow">
-    <div id="ort">{{ weatherData?.location.name }}</div>
-    <div class="unterbehaelter" id="aktuellesWetterBehaelter">
-      <img id="icon" :src="weatherData?.current.condition.icon" />
-      <div id="temperatur">{{ weatherData?.current.temp_c }}&deg;</div>
-      <div id="minmax">
-        <span
-          >Max: {{ weatherData?.forecast.forecastday[0].day.maxtemp_c }}&deg;
-        </span>
-        <span
-          >Min:
-          {{ weatherData?.forecast.forecastday[0].day.mintemp_c }}&deg;</span
-        >
+  <div
+    class="relative grid grid-cols-3 g mx-4 my-4 p-2 h-auto bg-slate-500 text-gray-100 font-bold delay-300"
+    @click="isShow = !isShow"
+  >
+    <div class="h-auto p-4 col-span-2 text-2xl">
+      {{ weatherData?.location.name }}
+    </div>
+    <div class="p-4 align-top font-bold text-right">
+      {{ days[d.getDay()] }}, {{ d.getDate() }}. {{ months[d.getMonth()] }}
+    </div>
+    <div class="">
+      <img
+        class="object-cover mx-auto my-4"
+        :src="weatherData?.current.condition.icon"
+      />
+      <div class="m-auto pb-7 w-20 text-center">
+        {{ weatherData?.current.condition.text }}
       </div>
     </div>
-
-    <div class="unterbehaelter" id="datumBehaelter">
-      <div id="beschreibung">{{ weatherData?.current.condition.text }}</div>
-      <div id="datum">
-        {{ days[d.getDay()] }}, {{ d.getDate() }}. {{ months[d.getMonth()] }}
-      </div>
+    <div class="m-auto p-auto text-6xl">
+      {{ weatherData?.current.temp_c }}&deg;
     </div>
-
-    <div class="unterbehaelter" id="forecastBehaelter" v-if="isShow">
-      <div class="forecast" id="forecast1">
-        <img
-          id="forecastIcon1"
-          :src="weatherData?.forecast.forecastday[1].day.condition.icon"
-        />
-        <br />
-        {{ weatherData?.forecast.forecastday[1].day.maxtemp_c }}&deg;
-        <br />
-        {{ days[getDayOfWeek(1)] }}
-      </div>
-
-      <div class="forecast" id="forecast2">
-        <img
-          id="forecastIcon2"
-          :src="weatherData?.forecast.forecastday[2].day.condition.icon"
-        />
-        <br />
-        {{ weatherData?.forecast.forecastday[2].day.maxtemp_c }}&deg;
-        <br />
-        {{ days[getDayOfWeek(2)] }}
-      </div>
+    <div class="m-auto text-xl text-right align-middle">
+      <span
+        >Max: {{ weatherData?.forecast.forecastday[0].day.maxtemp_c }}&deg;
+      </span>
+      <br />
+      <span
+        >Min:
+        {{ weatherData?.forecast.forecastday[0].day.mintemp_c }}&deg;</span
+      >
     </div>
-    <button
-      name="deleteButton"
-      @click.stop="emit('deleteWidget', props.location)"
-    >
-      Remove
-    </button>
+    <div class="mx-auto my-4" v-if="isShow">
+      <img
+        class="mx-auto my-4"
+        :src="weatherData?.forecast.forecastday[1].day.condition.icon"
+      />
+      {{ weatherData?.forecast.forecastday[1].day.maxtemp_c }}&deg;
+      {{ days[getDayOfWeek(1)] }}
+    </div>
+    <div v-if="isShow" class="mx-auto my-4">
+      <img
+        class="mx-auto my-4"
+        :src="weatherData?.forecast.forecastday[2].day.condition.icon"
+      />
+      {{ weatherData?.forecast.forecastday[2].day.maxtemp_c }}&deg;
+      {{ days[getDayOfWeek(2)] }}
+    </div>
+    <div v-if="isShow" class="absolute bottom-0 right-0">
+      <button
+        @click.stop="emit('deleteWidget', props.location)"
+        class="font-bold mx-4 my-2 text-red-500"
+      >
+        Remove
+      </button>
+    </div>
   </div>
 </template>
 
@@ -122,94 +126,4 @@ async function getWeatherJSON() {
 }
 </script>
 
-<style scoped>
-.widgetBehaelter {
-  width: 500px;
-  padding: 20px;
-  margin: 20px auto;
-  background: rgba(37, 36, 37, 0.5);
-  border: 2px;
-  border-radius: 10px;
-}
-
-.unterbehaelter {
-  display: flex;
-}
-
-.forecast {
-  font-family: Arial, Helvetica, sans-serif;
-  text-transform: uppercase;
-  text-align: center;
-  font-weight: bold;
-  color: rgba(233, 233, 233, 0.8);
-  width: 40%;
-  margin: auto;
-  padding: 1rem 1rem;
-  vertical-align: middle;
-  display: inline-block;
-}
-
-#ort {
-  font-family: Arial, Helvetica, sans-serif;
-  text-transform: uppercase;
-  font-weight: bold;
-  text-align: center;
-  color: rgba(233, 233, 233, 0.8);
-  width: 80%;
-}
-
-#temperatur {
-  font-family: Arial, Helvetica, sans-serif;
-  text-transform: uppercase;
-  text-align: center;
-  vertical-align: text-bottom;
-  font-weight: bold;
-  font-size: 3rem;
-  color: rgba(233, 233, 233, 0.8);
-  padding: 10px;
-  width: 30%;
-  margin: auto;
-}
-
-#minmax {
-  font-family: Arial, Helvetica, sans-serif;
-  text-transform: uppercase;
-  text-align: left;
-  vertical-align: text-bottom;
-  font-weight: bold;
-  color: rgba(233, 233, 233, 0.8);
-  padding: 10px;
-  width: 30%;
-  margin: auto;
-}
-
-#datum {
-  font-family: Arial, Helvetica, sans-serif;
-  text-transform: uppercase;
-  text-align: left;
-  font-weight: bold;
-  color: rgba(233, 233, 233, 0.8);
-  padding: 10px;
-  margin-left: auto;
-}
-
-#icon {
-  padding: 10px;
-  text-align: center;
-  margin: auto;
-}
-
-#beschreibung {
-  font-family: Arial, Helvetica, sans-serif;
-  text-transform: uppercase;
-  text-align: left;
-  font-weight: bold;
-  color: rgba(233, 233, 233, 0.8);
-  padding: 10px;
-}
-
-#datumBehaelter {
-  border-bottom-style: solid;
-  border-color: rgba(0, 0, 0, 0.5);
-}
-</style>
+<style scoped></style>

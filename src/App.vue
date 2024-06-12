@@ -1,9 +1,14 @@
 <template>
-  <div id="header">
-    <h1>Weather Forecast</h1>
+  <div
+    id="header"
+    class="font-bold text-5xl shadow-lg bg-gradient-to-r from-slate-500 to-green-500"
+  >
+    <h1 class="uppercase text-white text-center text-opacity-90">
+      Weather Forecast
+    </h1>
   </div>
 
-  <div id="widgetContainer">
+  <div>
     <Widget
       v-for="element in locations"
       :location="element"
@@ -11,7 +16,7 @@
       @deleteWidget="removeLocation"
     ></Widget>
   </div>
-  <div id="searchBarContainer">
+  <div>
     <Search @passCityName="addLocation" />
   </div>
 </template>
@@ -48,28 +53,4 @@ function removeLocation(nameOfCity: string) {
 }
 </script>
 
-<style>
-#addLocation {
-  font-size: 25px;
-  font-weight: bolder;
-  color: rgb(139, 136, 136, 0.5);
-  border-radius: 40px;
-  border-color: rgba(134, 134, 134, 0.5);
-  background: rgb(47, 79, 79, 0.5);
-  align-items: center;
-  height: 50px;
-  width: 50px;
-}
-
-#addLocation:hover {
-  font-size: 25px;
-  font-weight: bolder;
-  color: rgb(136, 136, 136, 1);
-  border-radius: 40px;
-  border-color: white;
-  background: rgb(47, 79, 79, 1);
-  align-items: center;
-  height: 50px;
-  width: 50px;
-}
-</style>
+<style></style>

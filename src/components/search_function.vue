@@ -1,18 +1,20 @@
 <template>
-  <div style="margin-left: 950px">
-    <div class="text-container">
+  <div>
+    <div class="mx-auto px-2">
       <input
         type="text"
         id="search"
         list="gesuchteStaedte"
         placeholder="Hier tippen..."
         v-model="userInput"
+        class="m-3 font-bold mx-auto flex"
       />
     </div>
     <ul id="gesuchteStaedte">
       <li
         v-for="element in citiesList"
         @click="emit('passCityName', element.name)"
+        class="font-bold bg bg-slate-600 text-center"
       >
         {{ element.name }}, {{ element.region }}, {{ element.country }}
       </li>
