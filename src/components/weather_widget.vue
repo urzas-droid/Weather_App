@@ -47,24 +47,86 @@
     </div>
     <button
       name="deleteButton"
-      @click=""
-      style="
-        text-align: center;
-        align-self: center;
-        margin: 0 auto;
-        width: 70px;
-      "
+      @click.stop="emit('deleteWidget', props.location)"
     >
-      DELETE
+      Remove
     </button>
   </div>
 </template>
 
+<script setup lang="ts">
+import { onMounted, ref } from "vue";
+
+const isShow = ref(false);
+const props = defineProps<{ location: string }>();
+const weatherData = ref<WeatherApiResponse>();
+const emit = defineEmits<{
+  deleteWidget: [locationName: string];
+}>();
+const d = new Date();
+const months = [
+  "Januar",
+  "Februar",
+  "März",
+  "April",
+  "Mai",
+  "Juni",
+  "Juli",
+  "August",
+  "September",
+  "Oktober",
+  "November",
+  "Dezember",
+];
+const days = [
+  "Sonntag",
+  "Montag",
+  "Dienstag",
+  "Mittwoch",
+  "Donnerstag",
+  "Freitag",
+  "Samstag",
+];
+
+onMounted(async () => {
+  weatherData.value = await getWeatherJSON();
+});
+
+type WeatherApiResponse = {
+  location: { name: string };
+  current: { temp_c: number; condition: { icon: string; text: string } };
+  forecast: {
+    forecastday: {
+      day: {
+        maxtemp_c: number;
+        mintemp_c: number;
+        condition: { icon: string };
+      };
+    }[];
+  };
+};
+
+function getDayOfWeek(x: number) {
+  return (d.getDay() + x) % 7;
+}
+
+async function getWeatherJSON() {
+  const apiKey = "key=30189c89030a42629e195610240306%20";
+  const apiCall = `https://api.weatherapi.com/v1/forecast.json?q=${props.location}&days=3&aqi=no&alerts=no&`;
+  let call = apiCall + apiKey;
+
+  const response = await fetch(call);
+  const forecast: WeatherApiResponse = await response.json();
+  console.log(forecast);
+  return forecast;
+}
+</script>
+
 <style scoped>
 .widgetBehaelter {
-  width: fit-content;
+  width: 500px;
   padding: 20px;
-  margin: 100px auto;
+  margin: 20px auto;
   background: rgba(37, 36, 37, 0.5);
   border: 2px;
   border-radius: 10px;
@@ -151,76 +213,3 @@
   border-color: rgba(0, 0, 0, 0.5);
 }
 </style>
-
-<script setup lang="ts">
-import { onMounted, ref } from "vue";
-
-let isShow = ref(false);
-
-const props = defineProps<{ location: string }>();
-
-const d = new Date();
-const months = [
-  "Januar",
-  "Februar",
-  "März",
-  "April",
-  "Mai",
-  "Juni",
-  "Juli",
-  "August",
-  "September",
-  "Oktober",
-  "November",
-  "Dezember",
-];
-const days = [
-  "Sonntag",
-  "Montag",
-  "Dienstag",
-  "Mittwoch",
-  "Donnerstag",
-  "Freitag",
-  "Samstag",
-];
-
-const weatherData = ref<WeatherApiResponse>();
-
-onMounted(async () => {
-  weatherData.value = await getWeatherJSON();
-});
-
-type WeatherApiResponse = {
-  location: { name: string };
-  current: { temp_c: number; condition: { icon: string; text: string } };
-  forecast: {
-    forecastday: {
-      day: {
-        maxtemp_c: number;
-        mintemp_c: number;
-        condition: { icon: string };
-      };
-    }[];
-  };
-};
-
-function getDayOfWeek(x: number) {
-  if (d.getDay() + x > 6) {
-    x = d.getDay() + x - 7;
-  } else {
-    x = d.getDay() + x;
-  }
-  return x;
-}
-
-async function getWeatherJSON() {
-  const apiKey = "key=30189c89030a42629e195610240306%20";
-  const apiCall = `https://api.weatherapi.com/v1/forecast.json?q=${props.location}&days=3&aqi=no&alerts=no&`;
-  let call = apiCall + apiKey;
-
-  const response = await fetch(call);
-  const forecast: WeatherApiResponse = await response.json();
-  console.log(forecast);
-  return forecast;
-}
-</script>

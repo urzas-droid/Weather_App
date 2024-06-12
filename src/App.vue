@@ -8,16 +8,18 @@
       v-for="element in locations"
       :location="element"
       id="baseWidget"
+      @deleteWidget="removeLocation"
     ></Widget>
   </div>
-  <div style="text-align: center">
-    <button id="addLocation" @click="addLocation">+</button>
+  <div id="searchBarContainer">
+    <Search @passCityName="addLocation" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
 import Widget from "./components/weather_widget.vue";
+import Search from "./components/search_function.vue";
 
 const locations = ref<string[]>([]);
 
@@ -32,17 +34,17 @@ function getCurrentLocation() {
 }
 
 function showPosition(position: any) {
-  const woBinICh = position.coords.latitude + ", " + position.coords.longitude;
-  locations.value.push(woBinICh);
+  const currentLocation =
+    position.coords.latitude + ", " + position.coords.longitude;
+  locations.value.push(currentLocation);
 }
 
-function addLocation() {
-  let userInputLocation = prompt("Welche Stadt möchten Sie hinzufügen?");
-  if (userInputLocation !== null) {
-    locations.value.push(userInputLocation);
-  } else {
-    console.log("Abgebrochen!");
-  }
+function addLocation(nameOfCity: string) {
+  locations.value.push(nameOfCity);
+}
+
+function removeLocation(nameOfCity: string) {
+  locations.value.splice(locations.value.indexOf(nameOfCity), 1);
 }
 </script>
 
