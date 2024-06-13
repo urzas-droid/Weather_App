@@ -9,7 +9,7 @@
     <div class="p-4 align-top font-bold text-right">
       {{ days[d.getDay()] }}, {{ d.getDate() }}. {{ months[d.getMonth()] }}
     </div>
-    <div class="">
+    <div>
       <img
         class="object-cover mx-auto my-4"
         :src="weatherData?.current.condition.icon"
@@ -31,23 +31,18 @@
         {{ weatherData?.forecast.forecastday[0].day.mintemp_c }}&deg;</span
       >
     </div>
-    <div class="mx-auto my-4" v-if="isShow">
-      <img
-        class="mx-auto my-4"
-        :src="weatherData?.forecast.forecastday[1].day.condition.icon"
-      />
-      {{ weatherData?.forecast.forecastday[1].day.maxtemp_c }}&deg;
-      {{ days[getDayOfWeek(1)] }}
+
+    <div
+      v-for="(element, index) in weatherData?.forecast.forecastday.slice(1)"
+      v-if="isShow"
+      class="mx-auto my-4"
+    >
+      <img class="mx-auto my-4" :src="element?.day.condition.icon" />
+      {{ element?.day.maxtemp_c }}&deg;
+      {{ days[getDayOfWeek(index + 1)] }}
     </div>
-    <div v-if="isShow" class="mx-auto my-4">
-      <img
-        class="mx-auto my-4"
-        :src="weatherData?.forecast.forecastday[2].day.condition.icon"
-      />
-      {{ weatherData?.forecast.forecastday[2].day.maxtemp_c }}&deg;
-      {{ days[getDayOfWeek(2)] }}
-    </div>
-    <div v-if="isShow" class="absolute bottom-0 right-0">
+
+    <div v-if="isShow" class="self-end text-right">
       <button
         @click.stop="emit('deleteWidget', props.location)"
         class="font-bold mx-4 my-2 text-red-500"

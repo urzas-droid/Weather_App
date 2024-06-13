@@ -1,6 +1,5 @@
 <template>
   <div
-    id="header"
     class="font-bold text-5xl shadow-lg bg-gradient-to-r from-slate-500 to-green-500"
   >
     <h1 class="uppercase text-white text-center text-opacity-90">
@@ -52,5 +51,3 @@ function removeLocation(nameOfCity: string) {
   locations.value.splice(locations.value.indexOf(nameOfCity), 1);
 }
 </script>
-
-<style></style>
