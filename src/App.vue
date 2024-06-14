@@ -18,7 +18,10 @@
   <div>
     <Search @passCityName="locationStore.addLocation" />
   </div>
-  <button @click="getCurrentLocation" class="bg-slate-50 mx-auto flex">
+  <button
+    @click="getCurrentLocation"
+    class="bg-slate-500 mx-auto flex font-bold uppercase hover:bg-green-600"
+  >
     Get Weather for your Location
   </button>
 </template>

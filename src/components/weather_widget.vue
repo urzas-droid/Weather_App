@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative grid grid-cols-3 g mx-4 my-4 p-2 h-auto bg-slate-500 text-gray-100 font-bold delay-300"
+    class="grid grid-cols-3 mx-auto my-4 p-2 h-auto max-w-2xl max-h-max bg-slate-500 text-gray-100 font-bold rounded-md hover:bg-slate-400"
     @click="isShow = !isShow"
   >
     <div class="h-auto p-4 col-span-2 text-2xl">
@@ -119,5 +119,3 @@ async function getWeatherJSON() {
   return forecast;
 }
 </script>
-
-<style scoped></style>

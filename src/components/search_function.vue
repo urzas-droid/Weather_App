@@ -5,16 +5,16 @@
         type="text"
         id="search"
         list="gesuchteStaedte"
-        placeholder="Hier tippen..."
+        placeholder="Hier Stadt eingeben..."
         v-model="userInput"
         class="m-3 font-bold mx-auto flex"
       />
     </div>
-    <ul id="gesuchteStaedte">
+    <ul v-if="userInput !== ''">
       <li
         v-for="element in citiesList"
         @click="emit('passCityName', element.name)"
-        class="font-bold bg bg-slate-600 text-center"
+        class="font-bold bg bg-slate-400 text-center min-w-min max-w-max my-2 mx-auto hover:bg-slate-300"
       >
         {{ element.name }}, {{ element.region }}, {{ element.country }}
       </li>
@@ -57,5 +57,3 @@ async function searchSuggestion(searchPhrase: string) {
   return suggestions;
 }
 </script>
-
-<style></style>
