@@ -9,14 +9,14 @@
 
   <div>
     <Widget
-      v-for="element in locations"
+      v-for="element in locationStore.locationsList"
       :location="element"
       id="baseWidget"
-      @deleteWidget="removeLocation"
+      @deleteWidget="locationStore.deleteLocation(element)"
     ></Widget>
   </div>
   <div>
-    <Search @passCityName="addLocation" />
+    <Search @passCityName="locationStore.addLocation" />
   </div>
   <button @click="getCurrentLocation" class="bg-slate-50 mx-auto flex">
     Get Weather for your Location
@@ -27,18 +27,11 @@
 import { onMounted, ref, watch } from "vue";
 import Widget from "./components/weather_widget.vue";
 import Search from "./components/search_function.vue";
-import { defineStore } from "pinia";
+import { useLocationStore } from "./store/useLocationStore";
 
-const locations = ref<string[]>([]);
+const locationStore = useLocationStore();
 
-onMounted(() => {
-  locations.value = JSON.parse(localStorage.getItem("locations") ?? "[]");
-});
-
-watch(locations, (newVal) => {
-  localStorage.setItem("locations", JSON.stringify(newVal));
-});
-
+//////////////////////////////////////////////////////////////////////
 function getCurrentLocation() {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(showPosition);
@@ -47,19 +40,10 @@ function getCurrentLocation() {
   }
 }
 
+///
 function showPosition(position: any) {
   const currentLocation =
     position.coords.latitude + ", " + position.coords.longitude;
-  locations.value.push(currentLocation);
-}
-
-function addLocation(nameOfCity: string) {
-  locations.value = [...locations.value, nameOfCity];
-}
-
-function removeLocation(nameOfCity: string) {
-  locations.value = locations.value.filter(
-    (location) => location !== nameOfCity,
-  );
+  //locations.value.push(currentLocation);
 }
 </script>

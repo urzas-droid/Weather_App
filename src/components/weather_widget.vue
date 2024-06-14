@@ -116,7 +116,7 @@ async function getWeatherJSON() {
 
   const response = await fetch(call);
   const forecast: WeatherApiResponse = await response.json();
-  console.log(forecast);
+  //console.log(forecast);
   return forecast;
 }
 </script>
