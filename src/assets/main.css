@@ -1,13 +1,7 @@
-body {
-  background-color: rgb(55, 58, 75) ;
-  background-size: 100% auto;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-h1 {
-  font-family: Arial, Helvetica, sans-serif;
-  text-align: center;
-  text-transform: uppercase;
-  color: whitesmoke;
-  opacity: 0.5;
+html {
+  background-color: rgb(49, 47, 47);
 }
-
