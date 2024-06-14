@@ -31,7 +31,6 @@ import { useLocationStore } from "./store/useLocationStore";
 
 const locationStore = useLocationStore();
 
-//////////////////////////////////////////////////////////////////////
 function getCurrentLocation() {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(showPosition);
@@ -40,10 +39,9 @@ function getCurrentLocation() {
   }
 }
 
-///
 function showPosition(position: any) {
   const currentLocation =
     position.coords.latitude + ", " + position.coords.longitude;
-  //locations.value.push(currentLocation);
+  locationStore.addLocation(currentLocation);
 }
 </script>
