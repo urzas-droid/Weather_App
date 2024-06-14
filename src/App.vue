@@ -18,16 +18,26 @@
   <div>
     <Search @passCityName="addLocation" />
   </div>
+  <button @click="getCurrentLocation" class="bg-slate-50 mx-auto flex">
+    Get Weather for your Location
+  </button>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import Widget from "./components/weather_widget.vue";
 import Search from "./components/search_function.vue";
+import { defineStore } from "pinia";
 
 const locations = ref<string[]>([]);
 
-getCurrentLocation();
+onMounted(() => {
+  locations.value = JSON.parse(localStorage.getItem("locations") ?? "[]");
+});
+
+watch(locations, (newVal) => {
+  localStorage.setItem("locations", JSON.stringify(newVal));
+});
 
 function getCurrentLocation() {
   if (navigator.geolocation) {
@@ -44,10 +54,12 @@ function showPosition(position: any) {
 }
 
 function addLocation(nameOfCity: string) {
-  locations.value.push(nameOfCity);
+  locations.value = [...locations.value, nameOfCity];
 }
 
 function removeLocation(nameOfCity: string) {
-  locations.value.splice(locations.value.indexOf(nameOfCity), 1);
+  locations.value = locations.value.filter(
+    (location) => location !== nameOfCity,
+  );
 }
 </script>
