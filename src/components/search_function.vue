@@ -14,7 +14,7 @@
       <li
         v-for="element in citiesList"
         @click="emit('passCityName', element.name)"
-        class="font-bold bg bg-slate-400 text-center min-w-min max-w-max my-2 mx-auto hover:bg-slate-300"
+        class="font-bold text-xs min-w-min max-w-max my-2 mx-auto bg-slate-400 hover:bg-slate-300"
       >
         {{ element.name }}, {{ element.region }}, {{ element.country }}
       </li>

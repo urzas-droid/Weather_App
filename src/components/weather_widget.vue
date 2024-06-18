@@ -1,6 +1,6 @@
 <template>
   <div
-    class="grid grid-cols-3 mx-auto my-4 p-2 h-auto max-w-2xl max-h-max bg-slate-500 text-gray-100 font-bold rounded-md hover:bg-slate-400"
+    class="grid grid-cols-3 mx-auto my-4 p-2 h-auto max-w-2xl max-h-max bg-teal-500 text-gray-100 font-bold hover:bg-slate-400"
     @click="isShow = !isShow"
   >
     <div class="h-auto p-4 col-span-2 text-2xl">
@@ -14,7 +14,7 @@
         class="object-cover mx-auto my-4"
         :src="weatherData?.current.condition.icon"
       />
-      <div class="m-auto pb-7 w-20 text-center">
+      <div class="m-auto pb-7 w-20 text-center text-xl">
         {{ weatherData?.current.condition.text }}
       </div>
     </div>
@@ -116,6 +116,7 @@ async function getWeatherJSON() {
 
   const response = await fetch(call);
   const forecast: WeatherApiResponse = await response.json();
+  console.log(forecast);
   return forecast;
 }
 </script>
