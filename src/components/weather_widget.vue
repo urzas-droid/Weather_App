@@ -30,6 +30,8 @@
         >Min:
         {{ weatherData?.forecast.forecastday[0].day.mintemp_c }}&deg;</span
       >
+      <br />
+      <span>Humidity: {{ weatherData?.current.humidity }}&percnt;</span>
     </div>
 
     <div
@@ -42,14 +44,14 @@
       {{ days[getDayOfWeek(index + 1)] }}
     </div>
 
-    <div v-if="isShow" class="self-end text-right">
+    <!-- <div v-if="isShow" class="self-end text-right">
       <button
         @click.stop="emit('deleteWidget', props.location)"
         class="font-bold mx-4 my-2 text-red-500"
       >
         Remove
       </button>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -92,15 +94,33 @@ onMounted(async () => {
 });
 
 type WeatherApiResponse = {
-  location: { name: string };
-  current: { temp_c: number; condition: { icon: string; text: string } };
+  location: {
+    name: string;
+    country: string;
+    region: string;
+    localtime: string;
+  };
+  current: {
+    temp_c: number;
+    condition: { icon: string; text: string };
+    feelslike_c: number;
+    wind_kph: number;
+    humidity: number;
+    uv: number;
+  };
   forecast: {
     forecastday: {
       day: {
         maxtemp_c: number;
         mintemp_c: number;
-        condition: { icon: string };
+        condition: { icon: string; text: string };
+        daily_chance_of_rain: number;
       };
+      hour: {
+        chance_of_rain: number;
+        temp_c: number;
+        condition: { icon: string };
+      }[];
     }[];
   };
 };
@@ -111,7 +131,7 @@ function getDayOfWeek(x: number) {
 
 async function getWeatherJSON() {
   const apiKey = "key=30189c89030a42629e195610240306%20";
-  const apiCall = `https://api.weatherapi.com/v1/forecast.json?q=${props.location}&days=3&aqi=no&alerts=no&`;
+  const apiCall = `https://api.weatherapi.com/v1/forecast.json?q=${props.location}&days=3&aqi=no&alerts=yes&`;
   let call = apiCall + apiKey;
 
   const response = await fetch(call);
