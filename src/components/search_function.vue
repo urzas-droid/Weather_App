@@ -23,7 +23,49 @@
 </template>
 
 <script setup lang="ts">
+export type WeatherApiResponse = {
+  location: {
+    name: string;
+    country: string;
+    region: string;
+    localtime: string;
+  };
+  current: {
+    temp_c: number;
+    condition: { icon: string; text: string };
+    feelslike_c: number;
+    wind_kph: number;
+    humidity: number;
+    uv: number;
+  };
+  forecast: {
+    forecastday: {
+      day: {
+        maxtemp_c: number;
+        mintemp_c: number;
+        condition: { icon: string; text: string };
+        daily_chance_of_rain: number;
+      };
+      hour: {
+        chance_of_rain: number;
+        temp_c: number;
+        condition: { icon: string };
+      }[];
+    }[];
+  };
+  alerts: {
+    alert: {
+      category: string;
+      desc: string;
+      event: string;
+    }[];
+  };
+};
+
 import { onMounted, ref, watch } from "vue";
+import { useWeatherDataStore } from "../store/useWeatherDataStore";
+
+const WeatherDataStore = useWeatherDataStore();
 
 type SearchApiResponse = {
   name: string;

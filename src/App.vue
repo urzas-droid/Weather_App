@@ -47,11 +47,13 @@ import Widget from "./components/weather_widget.vue";
 import Search from "./components/search_function.vue";
 import NavbarWidget from "./components/navbar_weather_widget.vue";
 import { useLocationStore } from "./store/useLocationStore";
+import { useWeatherDataStore } from "./store/useWeatherDataStore";
 
+const weatherDataStore = useWeatherDataStore();
 const locationStore = useLocationStore();
 const isHidden = ref(true);
 
-function getCurrentLocation() {
+/* function getCurrentLocation() {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(showPosition);
   } else {
@@ -63,5 +65,5 @@ function showPosition(position: any) {
   const currentLocation =
     position.coords.latitude + ", " + position.coords.longitude;
   locationStore.addLocation(currentLocation);
-}
+} */
 </script>
