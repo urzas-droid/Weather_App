@@ -1,10 +1,10 @@
 <template>
   <div
-    class="font-bold uppercase text-xl text-left bg-cyan-800 hover:bg-cyan-700 text-slate-200 grid grid-cols-2 my-4"
+    class="font-bold uppercase text-xl text-left bg-cyan-900 hover:bg-cyan-700 text-slate-200 grid grid-cols-2 my-4 mx-2 rounded-sm shadow-lg"
   >
     <div
       class="ml-4"
-      @click="locationStore.setActiveWidget(props.location.toString())"
+      @click="() => locationStore.setActiveWidget(props.location.toString())"
     >
       {{ location }}
     </div>

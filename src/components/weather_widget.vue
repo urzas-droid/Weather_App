@@ -1,6 +1,6 @@
 <template>
   <div
-    class="grid grid-cols-3 grid-rows-5 bg-cyan-900 text-gray-100 font-bold mx-auto my-4 p-4 max-w-xl gap-4 rounded-md h-fit"
+    class="grid grid-cols-3 grid-rows-5 grid-flow-row bg-cyan-900 text-gray-100 font-bold mx-auto my-4 p-4 max-w-xl gap-4 rounded-md"
   >
     <div class="col-span-2 text-left text-2xl">
       <p>{{ weatherData?.location.name }}</p>
@@ -23,7 +23,7 @@
       <p>Min: {{ weatherData?.forecast.forecastday[0].day.mintemp_c }}&deg;</p>
       <p>Max: {{ weatherData?.forecast.forecastday[0].day.maxtemp_c }}&deg;</p>
       <p>
-        Rain:
+        {{ $t("message.rain") }}:
         {{
           weatherData?.forecast.forecastday[0].day.daily_chance_of_rain
         }}&percnt;
@@ -34,7 +34,7 @@
       class="grid col-span-3 text-center overflow-x-scroll overflow-y-hidden grid-flow-col gap-2 text-sm no-scrollbar"
     >
       <div
-        class="w-16 h-22 rounded-md bg-gray-600"
+        class="w-16 h-22 rounded-md bg-gray-600 shadow-2xl"
         v-for="element in weatherData?.forecast.forecastday[0].hour"
         @click="getHoursForForecast(element.time)"
       >
@@ -44,40 +44,74 @@
         <p>{{ element.chance_of_rain }}&percnt;</p>
       </div>
     </div>
+    <div class="col-span-3 grid grid-cols-2 text-center">
+      <div class="col-span-1">
+        <img
+          :src="weatherData?.forecast.forecastday[1].day.condition.icon"
+          class="block mx-auto"
+        />
+        <div>{{ weatherData?.forecast.forecastday[1].day.condition.text }}</div>
+        <div>
+          {{
+            weatherData?.forecast.forecastday[1].day.daily_chance_of_rain
+          }}&percnt;
+        </div>
+      </div>
+      <div class="col-span-1">
+        <img
+          :src="weatherData?.forecast.forecastday[2].day.condition.icon"
+          class="block mx-auto"
+        />
+        <div>{{ weatherData?.forecast.forecastday[2].day.condition.text }}</div>
+        <div>
+          {{
+            weatherData?.forecast.forecastday[2].day.daily_chance_of_rain
+          }}&percnt;
+        </div>
+      </div>
+    </div>
     <div class="col-span-1 text-center">
       <p>UV-Index:</p>
-      <p>{{ weatherData?.current.uv }}</p>
+      <p class="text-4xl">{{ weatherData?.current.uv }}</p>
     </div>
     <div class="col-span-1 text-center">
       <p>Wind:</p>
-      <p>{{ weatherData?.current.wind_kph }} km/h</p>
+      <p class="text-4xl">{{ weatherData?.current.wind_kph }} km/h</p>
     </div>
     <div class="col-span-1 text-center">
-      <p>Luftfeuchtigkeit</p>
-      <p>{{ weatherData?.current.humidity }}&percnt;</p>
+      <p>{{ $t("message.humidity") }}:</p>
+      <p class="text-4xl">{{ weatherData?.current.humidity }}&percnt;</p>
     </div>
-    <div class="col-span-3">
-      <p class="text-center">Wetterwarnungen:</p>
-      <p v-for="element in weatherData?.alerts.alert">{{ element.desc }}</p>
+    <div class="col-span-3" v-show="weatherData?.alerts.alert.length != 0">
+      <p class="text-center text-2xl text-yellow-500">
+        {{ $t("message.alert") }}:
+      </p>
+      <p
+        v-for="element in weatherData?.alerts.alert"
+        class="text-sm font-normal mt-4"
+      >
+      <p v-for="item in element.desc.split('*')" class="mt-2">{{ item }}</p>
+        
+        <p class="font-bold text-yellow-500">----</p>
+      </p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch, watchEffect } from "vue";
 import { useWeatherDataStore } from "../store/useWeatherDataStore";
+import { useLocationStore } from "@/store/useLocationStore";
 
 const WeatherDataStore = useWeatherDataStore();
 
-///implementieren V
-const alarm = ref(false);
-/////////////////////
+const locationStore = useLocationStore();
 
-const props = defineProps<{ location: string }>();
 const weatherData = ref<WeatherApiResponse>();
-/* const emit = defineEmits<{
+
+const emit = defineEmits<{
   deleteWidget: [locationName: string];
-}>(); */
+}>();
 const d = new Date();
 const months = [
   "Januar",
@@ -102,10 +136,6 @@ const days = [
   "Freitag",
   "Samstag",
 ];
-
-onMounted(async () => {
-  weatherData.value = await getWeatherJSON();
-});
 
 export type WeatherApiResponse = {
   location: {
@@ -151,9 +181,13 @@ function getDayOfWeek(x: number) {
   return (d.getDay() + x) % 7;
 }
 
-async function getWeatherJSON() {
-  const apiKey = "key=30189c89030a42629e195610240306%20";
-  const apiCall = `https://api.weatherapi.com/v1/forecast.json?q=${props.location}&days=3&aqi=no&alerts=yes&`;
+watchEffect(async () => {
+  weatherData.value = await getWeatherJSON(locationStore.activeWidget);
+});
+
+async function getWeatherJSON(location: string) {
+  const apiKey = "&key=30189c89030a42629e195610240306%20";
+  const apiCall = `https://api.weatherapi.com/v1/forecast.json?q=${location}&days=3&aqi=no&alerts=yes`;
   let call = apiCall + apiKey;
 
   const response = await fetch(call);

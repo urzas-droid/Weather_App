@@ -5,7 +5,7 @@ import { ref, watch } from "vue";
 export const useLocationStore = defineStore("locationsSaved", () => {
 
     const locationsList = ref<string[]>( JSON.parse(localStorage.getItem("locations") ?? "[]"));
-    const activeWidget = ref<string>(JSON.parse(localStorage.getItem("activeWidget") ?? ""))
+    const activeWidget = ref<string>(localStorage.getItem("activeWidget") ?? "")
 
     function addLocation(locationName: string) {
       locationsList.value = [...locationsList.value, locationName]
@@ -17,8 +17,9 @@ export const useLocationStore = defineStore("locationsSaved", () => {
       );
     }
 
-    function setActiveWidget(location: string){
-      activeWidget.value = location;
+    function setActiveWidget(locationName: string){
+      localStorage.setItem("activeWidget", locationName);
+      activeWidget.value = locationName
     }
 
     watch(locationsList, (newVal) => {
@@ -26,5 +27,5 @@ export const useLocationStore = defineStore("locationsSaved", () => {
         localStorage.setItem("locations", JSON.stringify(newVal));
       });
   
-    return {locationsList, activeWidget, addLocation, deleteLocation, setActiveWidget}
+    return {locationsList, activeWidget , addLocation, deleteLocation, setActiveWidget}
   });
