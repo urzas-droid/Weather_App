@@ -63,9 +63,6 @@ export type WeatherApiResponse = {
 };
 
 import { onMounted, ref, watch } from "vue";
-import { useWeatherDataStore } from "../store/useWeatherDataStore";
-
-const WeatherDataStore = useWeatherDataStore();
 
 type SearchApiResponse = {
   name: string;

@@ -8,7 +8,7 @@
       <p class="text-sm">{{ weatherData?.location.country }}</p>
     </div>
     <div class="text-right text-sm h-8 pr-2">
-      {{ days[d.getDay()] }}, {{ d.getDate() }}. {{ months[d.getMonth()] }}
+    {{ $t('message.days.' + d.getDay()) }}, {{ d.getDate() }}. {{ $t('message.months.' + d.getMonth()) }}
     </div>
     <div class="col-span-1 text-center pt-0">
       <p>
@@ -29,7 +29,6 @@
         }}&percnt;
       </p>
     </div>
-
     <div
       class="grid col-span-3 text-center overflow-x-scroll overflow-y-hidden grid-flow-col gap-2 text-sm no-scrollbar"
     >
@@ -46,6 +45,7 @@
     </div>
     <div class="col-span-3 grid grid-cols-2 text-center">
       <div class="col-span-1">
+        <p>Tag 1 Vorhersage</p>
         <img
           :src="weatherData?.forecast.forecastday[1].day.condition.icon"
           class="block mx-auto"
@@ -58,6 +58,7 @@
         </div>
       </div>
       <div class="col-span-1">
+        <p>Tag 2 Vorhersage</p>
         <img
           :src="weatherData?.forecast.forecastday[2].day.condition.icon"
           class="block mx-auto"
@@ -90,11 +91,13 @@
         v-for="element in weatherData?.alerts.alert"
         class="text-sm font-normal mt-4"
       >
-      <p v-for="item in element.desc.split('*')" class="mt-2">{{ item }}</p>
-        
+      <p v-for="item in element.desc.split('*')" class="mt-2">{{ item }}</p>        
         <p class="font-bold text-yellow-500">----</p>
       </p>
     </div>
+    <div v-show="weatherData?.alerts.alert.length == 0" class="col-span-3 text-center">
+      <p class=" text-2xl text-yellow-500 mb-4" >{{  $t("message.alert") }}:</p>
+      <p>{{ $t("message.noAlerts") }}</p> </div>
   </div>
 </template>
 
@@ -104,38 +107,13 @@ import { useWeatherDataStore } from "../store/useWeatherDataStore";
 import { useLocationStore } from "@/store/useLocationStore";
 
 const WeatherDataStore = useWeatherDataStore();
-
 const locationStore = useLocationStore();
-
 const weatherData = ref<WeatherApiResponse>();
+const d = new Date();
 
 const emit = defineEmits<{
   deleteWidget: [locationName: string];
 }>();
-const d = new Date();
-const months = [
-  "Januar",
-  "Februar",
-  "März",
-  "April",
-  "Mai",
-  "Juni",
-  "Juli",
-  "August",
-  "September",
-  "Oktober",
-  "November",
-  "Dezember",
-];
-const days = [
-  "Sonntag",
-  "Montag",
-  "Dienstag",
-  "Mittwoch",
-  "Donnerstag",
-  "Freitag",
-  "Samstag",
-];
 
 export type WeatherApiResponse = {
   location: {
@@ -177,10 +155,6 @@ export type WeatherApiResponse = {
   };
 };
 
-function getDayOfWeek(x: number) {
-  return (d.getDay() + x) % 7;
-}
-
 watchEffect(async () => {
   weatherData.value = await getWeatherJSON(locationStore.activeWidget);
 });
@@ -195,6 +169,10 @@ async function getWeatherJSON(location: string) {
   console.log(forecast);
   WeatherDataStore.addWeatherData(forecast);
   return forecast;
+}
+
+function getDayOfWeek(x: number) {
+  return (d.getDay() + x) % 7;
 }
 
 function getHoursForForecast(date: string) {

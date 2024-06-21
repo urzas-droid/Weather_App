@@ -1,25 +1,24 @@
 <template>
   <div
-    class="font-bold uppercase text-xl text-left bg-cyan-900 hover:bg-cyan-700 text-slate-200 grid grid-cols-2 my-4 mx-2 rounded-sm shadow-lg"
+    class="font-bold uppercase text-xl bg-cyan-900 hover:bg-cyan-700 text-slate-200 rounded-md shadow-lg m-2"
   >
-    <div
-      class="ml-4"
+    <p
+      class="inline-block w-5/6 my-4 ml-2"
       @click="() => locationStore.setActiveWidget(props.location.toString())"
     >
       {{ location }}
-    </div>
-    <div
-      class="text-red-500 text-right text-4xl min-w-min max-w-min justify-self-end px-2"
+    </p>
+    <p
+      class="text-red-500 text-4xl inline-block my-auto"
       @click="locationStore.deleteLocation(props.location.toString())"
     >
       -
-    </div>
+    </p>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useLocationStore } from "@/store/useLocationStore";
-import { onMounted, watch, ref } from "vue";
 
 const locationStore = useLocationStore();
 const props = defineProps<{ location: String }>();

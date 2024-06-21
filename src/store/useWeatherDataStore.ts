@@ -1,4 +1,3 @@
-import type { RefSymbol } from "@vue/reactivity";
 import { defineStore } from "pinia";
 import { ref, watch } from "vue";
 import type { WeatherApiResponse } from "../components/weather_widget.vue";

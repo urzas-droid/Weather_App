@@ -19,7 +19,30 @@ const i18n = createI18n({
                 headline: 'weather forecast',
                 humidity: 'Humidity',
                 alert: 'Warnings',
-                rain: 'Rain'
+                rain: 'Rain',
+                months: [
+                    "January", 
+                    "February",
+                    "March" ,
+                    "April",
+                    "May",
+                    "June",
+                    "July",
+                    "August",
+                    "September",
+                    "October",
+                    "November",
+                    "December"],
+                days : [
+                    "Sunday",
+                    "Monday",
+                    "Tuesday",
+                    "Wednesday",
+                    "Thursday",
+                    "Friday",
+                    "Saturday",
+                  ],
+                noAlerts: "no alerts",
             }
         },
         de:{
@@ -27,7 +50,31 @@ const i18n = createI18n({
                 headline: 'Wettervorhersage',
                 humidity: 'Luftfeuchtigkeit',
                 alert: 'Wetterwarnungen',
-                rain: 'Regen'
+                rain: 'Regen',
+                months: [
+                    "Januar",
+                    "Februar",
+                    "März",
+                    "April",
+                    "Mai",
+                    "Juni",
+                    "Juli",
+                    "August",
+                    "September",
+                    "Oktober",
+                    "November",
+                    "Dezember",
+                  ],
+                days : [
+                    "Sonntag",
+                    "Montag",
+                    "Dienstag",
+                    "Mittwoch",
+                    "Donnerstag",
+                    "Freitag",
+                    "Samstag",
+                  ],
+                  noAlerts: "keine Warnungen vorhanden."
             }
         }
     }

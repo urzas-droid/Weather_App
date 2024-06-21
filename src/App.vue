@@ -12,15 +12,18 @@
     <div class="uppercase text-center text-4xl col-span-2 min-w-max">
       {{ $t("message.headline") }}
     </div>
-    <div class="grid grid-cols-2 ">
-      <div>
-        <img src="./components/icons/ger_flag.png" class="h-4 w-6 mt-3 block ml-auto" @click='langChanger.locale.value="de"'></img>
-      </div>
-      <div>
-        <img src="./components/icons/uk_flag.png" class="h-4 w-6 mt-3" @click='langChanger.locale.value="en"'></img>
-      </div>
-      
-      
+    <div class="m-auto">
+      <img
+        src="./components/icons/ger_flag.png"
+        class="h-4 w-6 inline-block"
+        @click="langChanger.locale.value = 'de'"
+      />
+
+      <img
+        src="./components/icons/uk_flag.png"
+        class="h-4 w-6 inline-block"
+        @click="langChanger.locale.value = 'en'"
+      />
     </div>
   </div>
 
@@ -52,15 +55,13 @@ import Widget from "./components/weather_widget.vue";
 import Search from "./components/search_function.vue";
 import NavbarWidget from "./components/navbar_weather_widget.vue";
 import { useLocationStore } from "./store/useLocationStore";
-import { useWeatherDataStore } from "./store/useWeatherDataStore";
 import { useI18n } from "vue-i18n";
 
-const weatherDataStore = useWeatherDataStore();
 const locationStore = useLocationStore();
 const isHidden = ref(true);
 
 const langChanger = useI18n();
-langChanger.locale.value= 'de'
+langChanger.locale.value = "de";
 
 /* function getCurrentLocation() {
   if (navigator.geolocation) {
