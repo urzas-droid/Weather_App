@@ -36,6 +36,12 @@
         { invisible: isHidden },
       ]"
     >
+      <div
+        class="font-bold uppercase text-xl bg-neutral-600 text-slate-200 rounded-md shadow-lg m-2 text-center"
+        @click="showWeather = !showWeather"
+      >
+        Form
+      </div>
       <Search @passCityName="locationStore.addLocation" />
 
       <NavbarWidget
@@ -43,8 +49,11 @@
         :location="element"
       ></NavbarWidget>
     </div>
-    <div class="col-span-2 min-w-max">
+    <div class="col-span-2 min-w-max" v-if="showWeather">
       <Widget> </Widget>
+    </div>
+    <div class="col-span-2 min-w-max" v-if="!showWeather">
+      <FormTest></FormTest>
     </div>
   </div>
 </template>
@@ -56,9 +65,11 @@ import Search from "./components/search_function.vue";
 import NavbarWidget from "./components/navbar_weather_widget.vue";
 import { useLocationStore } from "./store/useLocationStore";
 import { useI18n } from "vue-i18n";
+import FormTest from "./components/forms_test.vue";
 
 const locationStore = useLocationStore();
 const isHidden = ref(true);
+const showWeather = ref(true);
 
 const langChanger = useI18n();
 langChanger.locale.value = "de";

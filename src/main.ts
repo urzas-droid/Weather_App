@@ -2,6 +2,7 @@ import './assets/main.css'
 import { createI18n } from 'vue-i18n'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import {plugin, defaultConfig} from '@formkit/vue'
 import App from './App.vue'
 
 
@@ -80,6 +81,7 @@ const i18n = createI18n({
     }
 })
 
+app.use(plugin, defaultConfig)
 app.use(i18n)
 app.use(pinia)
 app.mount('#app')
